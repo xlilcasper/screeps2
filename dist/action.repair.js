@@ -42,7 +42,7 @@ var actionHarvest = {
         });
         if (creep.repair(creep.target()) == ERR_NOT_IN_RANGE) {
             //this.showTarget(creep,targets[0].pos);
-            creep.moveCloseTo(targets[0]);
+            creep.moveCloseTo(creep.target());
         } else {
             return false;
         }
