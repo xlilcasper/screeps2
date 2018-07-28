@@ -10,7 +10,8 @@ var roomState = {
     },
     owned_tick:function(roomManager, room){},
     respawnRequest: function(roomManager, creep) {},
-    nextState:function(room){ return this.name }
+    nextState:function(room){ return this.name },
+    status:function(room) { return ""; }
 }
 
 module.exports = roomState;

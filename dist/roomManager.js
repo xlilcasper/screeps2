@@ -51,12 +51,13 @@ var roomManager = {
             } else {
                 room.memory.lowEnergy=0;
             }
-            if (Game.time % 50 == 0) {
+            if (Game.time % 10 == 0) {
                 let last = room.memory.lastEnergy;
                 if (last == undefined)
                     last=0
                 room.memory.lastEnergy = this.getRollingAverage(room, 'energy')
                 log.info("Energy - Extra: " + room.memory.extraEnergy + " Low: " +room.memory.lowEnergy + " Avg:"+room.memory.lastEnergy + "Delta: "+ (room.memory.lastEnergy - last), "RoomManager", room)
+                log.info(this.report(room),"roomManager", room)
             }
 
         }
@@ -94,6 +95,32 @@ var roomManager = {
         let room = creep.room;
         let state = this.getState(room)
         state.respawnRequest(this, creep)
+    },
+    report: function(room) {
+
+        let counts = {}
+        for(let name in Game.creeps) {
+            let creep = Game.creeps[name];
+            if (counts[creep.getRole()] == undefined)
+                counts[creep.getRole()] = 1;
+            else
+                counts[creep.getRole()] += 1;
+        }
+
+        let creepRoles = `<tr>`;
+        let i = 0;
+        for (let role in counts) {
+            i++
+            creepRoles += `<td style="padding: 2px">${role}</td><td style="padding: 2px">${counts[role]}</td>`
+        }
+        creepRoles += `</tr>`;
+        var body =
+            `<table width="100%" border='1' cellpadding='3' style='font-size:10pt; border: 1px solid black; '>`+
+            `<tr><th colspan="${i}" align="center">Room: <a href="#!/room/${room.name}">${room.name}</a></th><th colspan="${i}" align="center">State: ${room.memory.state}</th></tr>`;
+        body += creepRoles;
+        //build our table of roles and counts
+        body += `</table>`;
+        return body
     }
 }
 

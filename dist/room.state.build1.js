@@ -75,6 +75,11 @@ var roomState = {
             return 'upgrade1';
         }
         return this.name
+    },
+    status: function(room) {
+        energyAvailable = Math.max(room.energyAvailable , 300);
+        energyCapacity = room.energyCapacityAvailable;
+        let status = "Energy: "+energyAvailable+"/"+energyCapacity + " builders: " + room.memory[this.name].upgraders + "/" + builders + " Check in "+ (room.memory[this.name].coolDown - Game.time);
     }
 }
 
