@@ -84,9 +84,15 @@ Creep.prototype.hasPart = function (part) {
     });
     return doI
 };
+
+Creep.prototype.countPart = function(part) {
+    return _.filter(this.body, function(bp){return bp.type == part;}).length;
+}
+
 Creep.prototype.getRole = function () {
     return this.memory.role;
 };
+
 Creep.prototype.moveCloseTo = function (target, range = 0) {
     if (target == undefined) {
         Log.warn("No target given to moveCloseTo.", "Creep - " + this.getRole(), this.room, this);
@@ -118,7 +124,7 @@ Creep.prototype.moveCloseTo = function (target, range = 0) {
     }
 
     if (this.fatigue) { // Don't do pathing if I can't even move
-        Log.debug('Creep is too tired to move ', this.room, this);
+        Log.debug('Creep is too tired to move ', 'Creep.moveCloseTo', this.room, this);
         return false
     } else {
         let result = this.moveTo(target, {reusePath: distance});

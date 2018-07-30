@@ -3,7 +3,7 @@ var log = require('logManager')
 var roleMinecart = {
     actions: ['pickupEnergy', 'transfer', 'deliver'],
     pickup_range: 100, //rooms are 50x50 so this should mean anywhere
-    max_body_size: 5,
+    max_body_size: 8,
     run: function (creep) {
         if (creep.state()==undefined)
             creep.setState(this.actions[0]);

@@ -17,7 +17,7 @@ var action = {
                 var range = creep.pos.getRangeTo(e.pos.x, e.pos.y);
                 return e.energy > 10 && range <= role.pickup_range
             }
-        })
+        });
 
         if (dropped) {
             creep.spout(Icons[Icons.DROPPED_ENERGY]);
@@ -34,4 +34,4 @@ var action = {
         return true;
     }
 };
-module.exports = action
+module.exports = action;

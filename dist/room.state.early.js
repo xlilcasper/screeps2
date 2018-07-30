@@ -4,7 +4,9 @@ var creepFactory = require('creepFactory');
 var roomStatePrototype = require('room.state.prototype')
 var roomState = {
     name: 'early',
-    owned_tick:function(roomManager, room){
+    max_body_size: 4,
+    owned_tick:function(roomManager, room) {
+        this._super_owned_tick(roomManager, room);
         if (room.hasSpawn()) {
             energyAvailable = Math.max(room.energyAvailable , 300);
             log.debug("Running state early. Energy: "+energyAvailable)

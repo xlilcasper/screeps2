@@ -2,19 +2,21 @@ var log = require('logManager');
 var countType = require('countType');
 var creepFactory = require('creepFactory');
 var finder = require('finder');
-var roomStatePrototype = require('room.state.prototype')
+var roomStatePrototype = require('room.state.prototype');
 
 var roomState = {
     name: 'build1',
+    max_body_size: 12,
     owned_tick:function(roomManager, room){
+        this._super_owned_tick(roomManager, room);
         if (room.hasSpawn()) {
             if (room.memory[this.name] == undefined) {
-                room.memory[this.name] = {}
-                room.memory[this.name].upgraders = 1
+                room.memory[this.name] = {};
+                room.memory[this.name].upgraders = 1;
                 room.memory[this.name].coolDown = 0
             }
             if (room.memory[this.name].coolDown == undefined)
-                room.memory[this.name].coolDown = 0
+                room.memory[this.name].coolDown = 0;
 
             if (Game.time > room.memory[this.name].coolDown) {
                 if (room.memory.extraEnergy > 50) {

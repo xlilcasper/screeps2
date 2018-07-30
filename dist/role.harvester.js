@@ -1,6 +1,6 @@
 var rolePrototype = require('role.prototype');
 var roleHarvester = {
-    actions: ['pickupEnergy', 'harvest','deliver'],
+    actions: ['pickupEnergy', 'harvest', 'transfer', 'deliver'],
     getSpawnData: function() {
         let data = require('spawnData');
         data = Object.create(data)

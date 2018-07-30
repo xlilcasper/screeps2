@@ -6,26 +6,34 @@ var countType = require('countType');
 
 var roomManager = {
     getState: function(room) {
-        roomState = require('room.state.'+room.memory.state)
-        roomState = Object.create(roomState)
+        roomState = require('room.state.'+room.memory.state);
+        roomState = Object.create(roomState);
         return roomState
     },
     tick:function() {
         if (Memory.softClaimed == undefined)
-            Memory.softClaimed = []
+            Memory.softClaimed = [];
         var knownRooms = _.union(_.keys(Game.rooms), Memory.softClaimed);
         for (var i in knownRooms) {
             var roomName = knownRooms[i];
             var room = Game.rooms[roomName];
+            if (room.memory.currentenergy == undefined)
+                room.memory.currentenergy = room.energyAvailable;
+            room.memory.lastenergy=room.memory.currentenergy;
+            room.memory.currentenergy=room.energyAvailable;
+            let net = room.memory.currentenergy - room.memory.lastenergy;
+            this.rollingAverage(room, 'energygain', room.memory.energygain, 50);
+            this.rollingAverage(room, 'netenergy', net, 50);
+
             if (room.memory.state == undefined)
-                room.memory.state = 'early'
+                room.memory.state = 'early';
             finder.findAll(room);
             if (room != undefined) {
                 roomState = this.getState(room)
                 if (room.memory.state != room.memory.lastState)
                     roomState.enter(room)
-                roomState.owned_tick(this, room)
-                room.memory.lastState = room.memory.state
+                roomState.owned_tick(this, room);
+                room.memory.lastState = room.memory.state;
                 room.memory.state = roomState.nextState(room);
                 // if we changed states, clear memory
                 if (room.memory.state != room.memory.lastState) {
@@ -51,15 +59,18 @@ var roomManager = {
             } else {
                 room.memory.lowEnergy=0;
             }
-            if (Game.time % 10 == 0) {
+            if (Game.time % 50 == 0) {
                 let last = room.memory.lastEnergy;
                 if (last == undefined)
                     last=0
                 room.memory.lastEnergy = this.getRollingAverage(room, 'energy')
-                log.info("Energy - Extra: " + room.memory.extraEnergy + " Low: " +room.memory.lowEnergy + " Avg:"+room.memory.lastEnergy + "Delta: "+ (room.memory.lastEnergy - last), "RoomManager", room)
+                // do a report
+                log.info(`Energy gain - instant: ${room.memory.energygain} avg: ${this.getRollingAverage(room,'energygain')} net: ${this.getRollingAverage(room,'netenergy')}`, "RoomManager",room);
+                log.info("Energy - Extra: " + room.memory.extraEnergy + " Low: " +room.memory.lowEnergy + " Avg:"+room.memory.lastEnergy + "Delta: "+ (room.memory.lastEnergy - last), "roomManager", room)
                 log.info(this.report(room),"roomManager", room)
             }
-
+            //Reset our energy gain for next tick
+            room.memory.energygain=0;
         }
     },
     maintainCreeps: function(room, type, energy, min_count, count=0, priority=creepFactory.PRIORITY_MED) {

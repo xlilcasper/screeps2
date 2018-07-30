@@ -11,7 +11,7 @@ var roleUpgrader = {
         data = require('spawnData');
         data.role='upgrader';
         data.body=[MOVE,CARRY,WORK];
-        data.scale=[WORK, CARRY];
+        data.scale=[WORK, CARRY, WORK, MOVE, WORK, CARRY, WORK, WORK, MOVE];
         return data;
     }
 }

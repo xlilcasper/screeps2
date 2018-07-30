@@ -33,7 +33,6 @@ var Log = {
         if (Memory.logLevel >= 2) this.buildMessage('red', message, tag, room, creep)
         //if(room) Notify('Error', message, 1, "https://screeps.com/a/#!/room/" + room.name)
     },
-
     critical: function(message, tag, room, creep) {
         if (Memory.logLevel >= 1) this.buildMessage('red', message, tag, room, creep)
         //if(room) Notify('Critical', message, 2, "https://screeps.com/a/#!/room/" + room.name)

@@ -47,7 +47,7 @@ var roleHandler = {
                     role.run(creep);
 
                 } catch (e) {
-                    log.error(e.stack,"Role Handler",creep.room,creep)
+                    log.error(e,"Role Handler",creep.room,creep)
                 }
                 log.monitorCPU("RoleRun",false,creep.name,.08,.1,.5);
             }

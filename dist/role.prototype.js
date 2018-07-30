@@ -47,6 +47,7 @@ var rolePrototype = {
                 log.error("Missing action: "+action, "rolePrototype.runActions",creep.room, creep)
             }
         }
+        log.warn(creep.name + " Did nothing", 'role.prototype.runActions', creep.room, creep)
         return '';
     },
     run: function(creep) { this.runActions(creep); },
@@ -172,15 +173,18 @@ var rolePrototype = {
 
         if (energy < 300)
             energy = 300;
-        var data = this.getSpawnData()
-        let body = data.body
-        log.debug("Energy available: "+energy)
+        var data = this.getSpawnData();
+        let body = data.body;
+        log.debug("Energy available: "+energy);
 
-        let i = 0
+        let i = 0;
         while (creepFactory.spawnCost(body) < energy - creepFactory.spawnCost([data.scale[i]])) {
             if (this.max_body_size>0 && body.length>= this.max_body_size)
-                break
-            body.push(data.scale[i])
+                break;
+            if (room.memory.max_body_size !== undefined && room.memory.max_body_size > 0 && body.length >= room.memory.max_body_size) {
+                break;
+            }
+            body.push(data.scale[i]);
             i = (i+1) % data.scale.length
         }
         return body
